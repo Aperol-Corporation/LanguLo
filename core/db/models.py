@@ -19,9 +19,7 @@ class Base(DeclarativeBase):
     """Base class for models."""
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    created_at: Mapped[datetime] = mapped_column(
-        server_default=func.current_timestamp()
-    )
+    created_at: Mapped[datetime] = mapped_column(server_default=func.current_timestamp())
 
     def to_dict(self):
         return {field.name: getattr(self, field.name) for field in self.__table__.c}
@@ -50,9 +48,7 @@ class Teacher(User):
 
     location: Mapped[str] = mapped_column(String(LOCATION_NAME_LENGTH))
 
-    preview_video: Mapped[FileField] = mapped_column(
-        FileField
-    )  # Complex config, add later
+    preview_video: Mapped[FileField] = mapped_column(FileField)  # Complex config, add later
 
     # TODO: How to make `topics` field
 
@@ -75,9 +71,7 @@ class Student(User):
 
     __tablename__ = "students"
 
-    languages_being_learnt: Mapped["Language"] = mapped_column(
-        ForeignKey("languages.id")
-    )
+    languages_being_learnt: Mapped["Language"] = mapped_column(ForeignKey("languages.id"))
     languages_spoken: Mapped["Language"] = mapped_column(ForeignKey("languages.id"))
     teachers: Mapped["Teacher"] = mapped_column(ForeignKey("teachers.id"))
 

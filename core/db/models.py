@@ -30,8 +30,8 @@ class User(Base):
 
     username: Mapped[str] = mapped_column(String(USERNAME_LENGTH), unique=True)
     email: Mapped[str] = mapped_column(String(EMAIL_LENGTH), unique=True)
-    first_name = Mapped[str] = mapped_column(String(FIRST_NAME_LENGTH))
-    last_name = Mapped[str] = mapped_column(String(LAST_NAME_LENGTH))
+    first_name: Mapped[str] = mapped_column(String(FIRST_NAME_LENGTH))
+    last_name: Mapped[str] = mapped_column(String(LAST_NAME_LENGTH))
     # TODO: Add wallet: WalletModel
 
 
@@ -56,7 +56,7 @@ class Teacher(User):
 
     # TODO: Add `certificate` filefield?
 
-    students = Mapped["Student"] = mapped_column(ForeignKey("students.id"))
+    students: Mapped["Student"] = mapped_column(ForeignKey("students.id"))
 
     courses: Mapped["Course"] = mapped_column(ForeignKey("courses.id"))
 

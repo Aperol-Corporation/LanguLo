@@ -1,0 +1,91 @@
+department: Users
+
+GET:
+  BY-ID:
+    query: "/users/<id>/"
+    param-type: int
+    body: null
+    description: Returns an instance of a User
+    returns:
+      Teacher: {
+        email: str,
+        first_name: str,
+        last_name: str,
+        role: str,
+        teaches: list(Language),
+        speaks: list(SpokenLanguage),
+        platform: str,
+        location: str,
+        preview_video: str,  # link to video
+        topics: list(Topic),
+        description: str,
+        certificate: str,
+        courses: list(Course)
+      }
+      Student: {
+        email: str,
+        first_name: str,
+        last_name: str,
+        role: str,
+        learns: list(Language),
+        speaks: list(SpokenLanguage),
+        teachers: list(Teacher)
+      }
+      Exception: DoesNotExistError
+  ALL:
+    query: "/users/"
+    param-type: null
+    body: null
+    description: Returns all Users
+    returns: list(Union(Teacher, Student))
+
+POST:
+  teachers:
+    query: "/users/teacher/"
+    param-type: null
+    body: Necessary fields for Teacher model in JSON
+    description: Create new Teacher instance
+    returns:
+      Teacher: {
+          email: str,
+          first_name: str,
+          last_name: str,
+          role: str,
+          teaches: list(Language),
+          speaks: list(SpokenLanguage),
+          platform: null,
+          location: str | null,
+          preview_video: str | null,  # link to video
+          topics: null,
+          description: str | null,
+          certificate: str | null,
+          courses: null
+        }
+  students:
+    query: "/users/student/"
+    param-type: null
+    body: Necessary fields for Student model in JSON
+    description: Create new Student instance
+    returns:
+      Student: {
+        email: str,
+        first_name: str,
+        last_name: str,
+        role: str,
+        learns: list(Language) | null,
+        speaks: list(SpokenLanguage),
+        teachers: null
+      }
+
+PATCH / PUT:
+  query: "/users/<id>/"
+  param-type: int
+  body: Fields to be changed in a User model
+  returns: Teacher | Student updated model | DoesNotExistError
+
+DELETE:
+  query: "/users/<id>/"
+  param-type: int
+  body: null
+  returns: 204 No Content | DoesNotExistError
+  

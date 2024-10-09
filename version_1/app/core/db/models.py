@@ -29,15 +29,6 @@ class Base(DeclarativeBase):
         }
 
 
-class SpokenBy(Base):
-    """Abstract model for through models utilizing SpokenLanguage."""
-
-    id = None
-    language_id: Mapped[int] = mapped_column(
-        ForeignKey('spoken_languages.id'), primary_key=True
-    )
-
-
 class User(Base):
     """Abstract User model."""
 
@@ -105,11 +96,16 @@ class Student(User):
         return f'<Student: {self.id} | {self.name}>'
 
 
-class StudentsTeachers(Base):
+class _NoID(Base):
+    """Abstract model for m2m models that don't have an `id` field"""
+
+    id = None
+
+
+class StudentsTeachers(_NoID):
     """Through model for Student-Teacher relationship."""
     __tablename__ = 'students_teachers'
 
-    id = None
     student_id: Mapped[int] = mapped_column(
         ForeignKey('students.id'), primary_key=True
     )
@@ -121,7 +117,7 @@ class StudentsTeachers(Base):
         return f'<Student {self.student_id} ~ Teacher {self.teacher_id}>'
 
 
-class TaughtByTeachers(Base):
+class TaughtByTeachers(_NoID):
     """
     Through model for Language-Teacher relationship.
     Maps to languages that the teacher teaches.
@@ -129,7 +125,6 @@ class TaughtByTeachers(Base):
 
     __tablename__ = 'taught_by_teachers'
 
-    id = None
     language_id: Mapped[int] = mapped_column(
         ForeignKey('languages.id'), primary_key=True
     )
@@ -141,7 +136,7 @@ class TaughtByTeachers(Base):
         return f'<Language {self.language_id} ~ Teacher {self.teacher_id}>'
 
 
-class SpokenByTeachers(SpokenBy):
+class SpokenByTeachers(_NoID):
     """
     Through model for SpokenLanguage-Teacher relationship.
     Maps to languages that the teacher can speak (i.e. to SpokenLanguage)
@@ -149,6 +144,9 @@ class SpokenByTeachers(SpokenBy):
 
     __tablename__ = 'spoken_by_teachers'
 
+    language_id: Mapped[int] = mapped_column(
+        ForeignKey('spoken_languages.id'), primary_key=True
+    )
     teacher_id: Mapped[int] = mapped_column(
         ForeignKey('teachers.id'), primary_key=True
     )
@@ -159,7 +157,7 @@ class SpokenByTeachers(SpokenBy):
         )
 
 
-class LearntByStudents(Base):
+class LearntByStudents(_NoID):
     """
     Through model for Language-Student relationship.
     Maps to languages that the student learns.
@@ -167,7 +165,6 @@ class LearntByStudents(Base):
 
     __tablename__ = 'learnt_by_students'
 
-    id = None
     language_id: Mapped[int] = mapped_column(
         ForeignKey('languages.id'), primary_key=True
     )
@@ -179,7 +176,7 @@ class LearntByStudents(Base):
         return f'<Language {self.language_id} ~ Student {self.student_id}>'
 
 
-class SpokenByStudents(SpokenBy):
+class SpokenByStudents(_NoID):
     """
     Through model for SpokenLanguage-Student relationship.
     Maps to languages that the student can speak (i.e. to SpokenLanguage)
@@ -187,6 +184,9 @@ class SpokenByStudents(SpokenBy):
 
     __tablename__ = 'spoken_by_students'
 
+    language_id: Mapped[int] = mapped_column(
+        ForeignKey('spoken_languages.id'), primary_key=True
+    )
     student_id: Mapped[int] = mapped_column(
         ForeignKey('students.id'), primary_key=True
     )

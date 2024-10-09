@@ -1,2 +1,1 @@
 # LanguLo
-Temporary name
